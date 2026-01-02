@@ -18,7 +18,7 @@ export const loginUser = async(user: LoginUserType) => {
     const existUser = await UserModel.findOne({ email: user.email });
     // Null stands for not found or not match
     if(!existUser) return null;
-    const isMatch = existUser.comparePassword(user.password);
+    const isMatch = await existUser.comparePassword(user.password);
     if(!isMatch) return null;
     return existUser;
 }

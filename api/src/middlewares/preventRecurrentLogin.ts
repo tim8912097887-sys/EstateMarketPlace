@@ -9,8 +9,8 @@ export const preventRecurrentLogin = (req: Request,res: Response,next: NextFunct
        // Check duplicate login 
        try {
           verifyToken(token,isAccess);
-          res.json({
-            success: true,
+          return res.status(409).json({
+            success: false,
             message: "You already login"
           })
        } catch (error) {

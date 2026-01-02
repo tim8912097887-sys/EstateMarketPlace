@@ -9,7 +9,8 @@ export const dbConnection = async() => {
     
     try {
         // Connecting to database
-        await mongoose.connect(env.DATABASE_URL,{
+        // Use database according to enviroment
+        await mongoose.connect(env.NODE_ENV==="development"?env.DEV_DATABASE_URL:env.TEST_DATABASE_URL,{
             // Limit the max size of pool to prevent slow operation
             maxPoolSize: 10,
             minPoolSize: 5,

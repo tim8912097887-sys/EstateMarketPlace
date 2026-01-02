@@ -1,36 +1,11 @@
-import express from "express";
-import userRouter from "./users/user.route.js";
+import app from "./app.js";
 import { dbConnection, dbDisconnection } from "./configs/db.js";
-import globalErrorHandler from "./utilities/globalErrorHandler.js";
-import { AppError } from "./utilities/customError.js";
-import cookieParser from "cookie-parser";
 
-const app = express();
-
-// Body Parser
-app.use(express.json());
-app.use(cookieParser());
-
-// Mount route
-app.use("/users",userRouter);
-
-// Test endpoint working
-app.get('/',(req,res) => {
-      res.json({ Success: true });
-})
 
 const server = app.listen(3000,async() => {
     console.log(`Server listen on port 3000`);
     await dbConnection();
 });
-
-// Handle unknown route
-app.use('/',(req,res,next) => {
-    next(new AppError("Not Found",404,`Can't find ${req.originalUrl} on this server!`,true));
-})
-
-// Catch all error
-app.use(globalErrorHandler);
 
 // Shutdown function
 const gracefulShutdown = (signal: string) => {

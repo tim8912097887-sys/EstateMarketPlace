@@ -11,7 +11,7 @@ export const signupUser = asyncErrorHandler(async(req: Request,res: Response) =>
     const existUser = await findUser(email);
     if(existUser) throw new AppError("Duplicate",409,"User already exist",true);
     const user = await createUser(req.body);
-    res.json({ success: true,data: { user } });
+    res.status(201).json({ success: true,data: { user } });
 })
 
 export const signinUser = asyncErrorHandler(async(req: Request,res: Response) => {
@@ -33,7 +33,7 @@ export const signinUser = asyncErrorHandler(async(req: Request,res: Response) =>
        // Only be send in the user endpoint   
        path: "/users"
     });
-    res.json({ success: true,data });
+    res.status(200).json({ success: true,data });
 })
 
 export const logoutUser = asyncErrorHandler(async(req: Request,res: Response) => {
@@ -44,7 +44,7 @@ export const logoutUser = asyncErrorHandler(async(req: Request,res: Response) =>
        secure: env.NODE_ENV==="production", 
        path: "/users"
     });
-    res.json({ success: true,message: "Loggout" });
+    res.status(200).json({ success: true,message: "Loggout" });
 })
 
 export const refreshUser = asyncErrorHandler(async(req: Request,res: Response) => {
@@ -66,6 +66,6 @@ export const refreshUser = asyncErrorHandler(async(req: Request,res: Response) =
        // Only be send in the user endpoint   
        path: "/users"
     });
-    res.json({ success: true,data });
+    res.status(201).json({ success: true,data });
 
 })

@@ -1,6 +1,8 @@
 import { compare, genSalt, hash } from "bcryptjs";
 import mongoose from "mongoose";
-import { resolve } from "node:dns";
+import { AppError } from "../utilities/customError.js";
+import { env } from "../configs/env.js";
+
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -56,7 +58,7 @@ userSchema.pre("save",async function() {
     if(!this.isModified("password")) return;
 
     try {
-       const salt = await genSalt(10);
+       const salt = await genSalt(env.NODE_ENV==="test"?Number(env.TEST_SALT):Number(env.DEV_SALT));
        const hashedPassword = await hash(this.password,salt);
        this.password = hashedPassword;
        return;
@@ -70,8 +72,7 @@ userSchema.post('save', function(error: any, doc: any, next: any) {
   // Only handle duplicate key error
   if (error.name === 'MongoError' && error.code === 11000) {
     const field = Object.keys(error.keyPattern)[0];
-    const customError = new Error(`${field} already exists`);
-    customError.httpCode = 409;
+    const customError = new AppError("Duplicate key",409,`${field} already exists`,true);
     throw customError;
   } else {
     // Rethrow error 
@@ -83,9 +84,11 @@ userSchema.post('save', function(error: any, doc: any, next: any) {
 // Automatic formatting for all API responses
 userSchema.set('toJSON', {
   transform: (doc, ret) => {
-    delete ret.password;
-    delete ret.__v;
-    return ret;
+    // Cast to any allow property deletion
+    const obj = ret as any;
+    delete obj.password;
+    delete obj.__v;
+    return obj;
   }
 });
 
