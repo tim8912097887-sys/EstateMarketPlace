@@ -1,9 +1,10 @@
 import app from "./app.js";
 import { dbConnection, dbDisconnection } from "./configs/db.js";
+import { env } from "./configs/env.js";
 
 
-const server = app.listen(3000,async() => {
-    console.log(`Server listen on port 3000`);
+const server = app.listen(env.PORT,async() => {
+    console.log(`Server listen on port ${env.PORT}`);
     await dbConnection();
 });
 
