@@ -5,11 +5,13 @@ import App from "./App";
 // import Signup from "./pages/Signup";
 // import About from "./pages/About";
 import React from "react";
+// import GuestOnly from "./components/GuestOnly";
 
 const Home = React.lazy(() => import('./pages/Home'));
 const SignIn = React.lazy(() => import('./pages/SignIn'));
 const SignUp = React.lazy(() => import('./pages/SignUp'));
 const About = React.lazy(() => import('./pages/About'));
+const GuestOnly = React.lazy(() => import('./components/GuestOnly'));
 
 export const router = createBrowserRouter([
     {
@@ -21,12 +23,18 @@ export const router = createBrowserRouter([
              Component: Home
            },
            {
-             path: 'signin',
-             Component: SignIn
-           },
-           {
-             path: 'signup',
-             Component: SignUp
+            // Only unAuth user can enter
+            Component: GuestOnly,
+            children: [
+              {
+                path: 'signin',
+                Component: SignIn
+              },
+              {
+                path: 'signup',
+                Component: SignUp
+              }
+            ]
            },
            {
              path: 'about',
