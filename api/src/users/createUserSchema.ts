@@ -27,7 +27,13 @@ export const CreateUserSchema = z.strictObject({
     .min(6,"Password at least six characters")
     // Fail fast for length,prevent regex dos attack
     .max(50,"Password at most fifty characters")
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,"Password required one lowercase,uppercase alpha,number and special character")
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,"Password required one lowercase,uppercase alpha,number and special character"),
+    avatar: z
+    .string("Image URL must be string")
+    // Check if valid
+    .refine((val) => validator.isURL(val,{ require_protocol: true }),"Invalid Image URL")
+    // Check extension
+    .refine((val) => ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'].some(ext => val.split("?")[0].toLowerCase().endsWith(`${ext}`)))
 })
 
 export type CreateUserType = z.infer<typeof CreateUserSchema>;

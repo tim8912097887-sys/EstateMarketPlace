@@ -3,7 +3,7 @@ import { loginUser, signupUser } from "../api/user"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../redux/store"
 import { signInFail, signInStart, signInSuccess, signUpFail, signUpStart, signUpSuccess } from "../redux/user/userSlice"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 
 type Props = {
     isLogin: boolean
@@ -58,7 +58,7 @@ const RegisterForm = ({ isLogin }: Props) => {
         if(typeof result === "string") {
            dispatch(signInFail(result));
         } else {
-           dispatch(signInSuccess({ username: result.user.username,accessToken: result.accessToken }));
+           dispatch(signInSuccess({ user: result.user,accessToken: result.accessToken }));
            console.log("success");
         }
     }
@@ -83,6 +83,7 @@ const RegisterForm = ({ isLogin }: Props) => {
        <form className="flex flex-col gap-4" onSubmit={isLogin?handleLogin:handleSignup}>
             {!isLogin && 
                 <input 
+                    placeholder='username'
                     className="p-3 rounded-lg border"
                     type="username" 
                     id="username"
@@ -92,6 +93,7 @@ const RegisterForm = ({ isLogin }: Props) => {
                 />
             }
             <input 
+                placeholder='email'
                 className="p-3 rounded-lg border"
                 type="email" 
                 id="email"
@@ -100,6 +102,7 @@ const RegisterForm = ({ isLogin }: Props) => {
                 onChange={(e) => handleChange(e.target.name as InputType,e.target.value)}
             />
             <input 
+                placeholder='password'
                 className="p-3 rounded-lg border"
                 type="password" 
                 id="password"
@@ -109,6 +112,10 @@ const RegisterForm = ({ isLogin }: Props) => {
             />
             <button className="rounded-lg text-white bg-slate-700 cursor-pointer p-3 uppercase hover:opacity-95 disabled:opacity-80" disabled={loading} type="submit">{loading?"Loading...":isLogin?"Login":"Signup"}</button>
         </form>
+        <div className="flex gap-2 mt-5">
+           <p>{isLogin?"Dont have an account?":"Have an account"}</p>
+           <Link  to={isLogin?"/signup":"/signin"}><span className="text-blue-700">{isLogin?"Sign Up":"Sign In"}</span></Link>
+        </div>
         {errorMsg && <p className="text-red-500 mt-5">{errorMsg}</p>}
     </>
   )

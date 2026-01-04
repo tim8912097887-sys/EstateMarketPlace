@@ -41,6 +41,22 @@ const userSchema = new mongoose.Schema({
             },
             message: "Password required one lowercase,uppercase alpha,number and special character"
         }
+    },
+    avatar: {
+        type: String,
+        required: [true,"Image is required"],
+        // Remove accidentally added space
+        trim: true,
+        validate: {
+            validator: (profile: string) => {
+                // Base url regex
+                const urlRegex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg))($|\?.*)$/i;
+                return urlRegex.test(profile);
+            },
+            message: (prop) => `${prop.value} is not a valid image URL` 
+        },
+        // Provide default for those who don't care
+        default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
     }
 },{
     timestamps: true,

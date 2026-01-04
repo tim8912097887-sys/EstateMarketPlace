@@ -1,8 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+type IintialState = {
+    currentUser: null | { username: string,avatar: string }
+    errorMsg: string
+    accessToken: string
+    loading: boolean
+}
+
 // Initialize the state
-const initialState = {
-    currentUser: "",
+const initialState: IintialState = {
+    currentUser: null,
     errorMsg: "",
     accessToken: "",
     loading: false
@@ -13,7 +20,7 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         signInSuccess: (state,action) => {
-            state.currentUser = action.payload.username;
+            state.currentUser = action.payload.user;
             state.accessToken = action.payload.accessToken;
             state.errorMsg = "";
             state.loading = false;
@@ -37,7 +44,7 @@ export const userSlice = createSlice({
             state.loading = true;
         },
         signOutSuccess: (state) => {
-            state.currentUser = "";
+            state.currentUser = null;
             state.accessToken = "";
             state.errorMsg = "";
             state.loading = false;

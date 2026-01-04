@@ -1,6 +1,6 @@
 import { CreateUserType } from "./createUserSchema.js";
 import { LoginUserType } from "./loginUserSchema.js";
-import { UserModel } from "./user.module.js"
+import { UserModel } from "./user.model.js"
 
 
 

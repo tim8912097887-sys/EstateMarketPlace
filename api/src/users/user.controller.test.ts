@@ -1,7 +1,7 @@
 import request from "supertest";
 import { dbConnection, dbDisconnection } from "../configs/db.js";
 import app from "../app.js";
-import { UserModel } from "./user.module.js";
+import { UserModel } from "./user.model.js";
 
 describe("User Authentication API",() => {
 

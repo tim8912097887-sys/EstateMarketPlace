@@ -7,7 +7,7 @@ const GuestOnly = () => {
     const currentUser = useSelector((state: RootState) => state.user.currentUser);
 
     // Navigate to home page if login
-    if(currentUser !== "") return <Navigate to="/" replace />
+    if(currentUser) return <Navigate to="/" replace />
   return <Outlet/>
 }
 
