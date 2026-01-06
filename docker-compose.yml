@@ -1,0 +1,26 @@
+services:
+ api:
+  build:
+   context: ./api
+   dockerfile: Dockerfile
+  ports:
+   - "3001:3001"
+  # Load environment variables
+  env_file:
+   - ./api/.env
+  environment: 
+   - NODE_ENV=development
+  # Add restart policy for production-level stability
+  restart: always
+ client: 
+  build:
+   context: ./client
+   dockerfile: Dockerfile
+  ports:
+   - "80:80"
+  # Wait for backend start
+  depends_on:
+   - api
+   
+  # Add restart policy for production-level stability
+  restart: always
