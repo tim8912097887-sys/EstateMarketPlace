@@ -83,6 +83,7 @@ const RegisterForm = ({ isLogin }: Props) => {
        <form className="flex flex-col gap-4" onSubmit={isLogin?handleLogin:handleSignup}>
             {!isLogin && 
                 <input 
+                    data-testid="username-input"
                     placeholder='username'
                     className="p-3 rounded-lg border"
                     type="username" 
@@ -93,6 +94,7 @@ const RegisterForm = ({ isLogin }: Props) => {
                 />
             }
             <input 
+                data-testid="email-input"
                 placeholder='email'
                 className="p-3 rounded-lg border"
                 type="email" 
@@ -102,6 +104,7 @@ const RegisterForm = ({ isLogin }: Props) => {
                 onChange={(e) => handleChange(e.target.name as InputType,e.target.value)}
             />
             <input 
+                data-testid="password-input"
                 placeholder='password'
                 className="p-3 rounded-lg border"
                 type="password" 
@@ -116,7 +119,7 @@ const RegisterForm = ({ isLogin }: Props) => {
            <p>{isLogin?"Dont have an account?":"Have an account"}</p>
            <Link  to={isLogin?"/signup":"/signin"}><span className="text-blue-700">{isLogin?"Sign Up":"Sign In"}</span></Link>
         </div>
-        {errorMsg && <p className="text-red-500 mt-5">{errorMsg}</p>}
+        {errorMsg && <p data-testid="form-error" className="text-red-500 mt-5">{errorMsg}</p>}
     </>
   )
 }
