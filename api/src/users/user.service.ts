@@ -9,6 +9,15 @@ export const findUser = async(email: string) => {
     return user;
 }
 
+export const findUserById = async(id: string) => {
+    const user = await UserModel.findById(id).lean();
+    return user;
+}
+
+export const userDelete = async(id: string) => {
+     const result = await UserModel.deleteOne({ _id: id });
+     return result.deletedCount;
+}
 export const createUser = async(user: CreateUserType) => {
     const newUser = await UserModel.create(user);
     return newUser;

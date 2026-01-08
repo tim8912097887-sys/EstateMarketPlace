@@ -4,7 +4,8 @@ export const createRequest = (method: "GET" | "POST" | "DELETE" | "PUT",data?: a
         method,
         headers: {
             "Content-Type": "application/json",
-        }
+        },
+        credentials: "include"
     }
     if(data) {
         config.body = JSON.stringify(data);

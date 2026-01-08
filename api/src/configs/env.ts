@@ -13,7 +13,8 @@ const envSchema = z.object({
     REFRESH_TOKEN_EXPIRATION: z.string("Token expiration time is string"),
     COOKIE_REFRESH_EXPIRATION: z.string("Cookie expiration time is string"),
     TEST_SALT: z.string(),
-    DEV_SALT: z.string()
+    DEV_SALT: z.string(),
+    WHITELIST: z.string()
 })
 
 // Validate the env

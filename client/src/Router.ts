@@ -5,6 +5,8 @@ import App from "./App";
 // import Signup from "./pages/Signup";
 // import About from "./pages/About";
 import React from "react";
+import AuthUser from "./components/AuthUser";
+import Profile from "./pages/Profile";
 // import GuestOnly from "./components/GuestOnly";
 
 const Home = React.lazy(() => import('./pages/Home'));
@@ -39,6 +41,16 @@ export const router = createBrowserRouter([
            {
              path: 'about',
              Component: About
+           },
+           {
+            Component: AuthUser,
+            children: [
+               {
+                // Only auth user can enter profile
+                 path: "profile",
+                 Component: Profile
+               }
+            ]
            }
         ]
     }

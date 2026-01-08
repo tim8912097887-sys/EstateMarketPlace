@@ -4,6 +4,7 @@ dist
 .gitignore
 cypress
 .env.local
+.env
 **/*.test.ts
 **/*.test.tsx
 README.md

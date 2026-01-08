@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 type IintialState = {
-    currentUser: null | { username: string,avatar: string }
+    currentUser: null | { username: string,email: string,avatar: string }
     errorMsg: string
     accessToken: string
     loading: boolean
@@ -56,9 +56,34 @@ export const userSlice = createSlice({
         signOutStart: (state) => {
             state.loading = true;
         },
+        deleteUserStart: (state) => {
+            state.loading = true;
+        },
+        deleteUserSuccess: (state) => {
+            state.currentUser = null;
+            state.accessToken = "";
+            state.loading = false;
+            state.errorMsg = "";
+        },
+        deleteUserFail: (state,action) => {
+            state.loading = false;
+            state.errorMsg = action.payload;
+        }
     }
 })
 // For dispatch the task
-export const { signInStart,signInFail,signInSuccess,signOutFail,signOutStart,signOutSuccess,signUpFail,signUpStart,signUpSuccess } = userSlice.actions;
+export const { 
+    signInStart
+    ,signInFail
+    ,signInSuccess
+    ,signOutFail
+    ,signOutStart
+    ,signOutSuccess
+    ,signUpFail
+    ,signUpStart
+    ,signUpSuccess
+    ,deleteUserFail
+    ,deleteUserStart
+    ,deleteUserSuccess } = userSlice.actions;
 // Use in store
 export default userSlice.reducer;

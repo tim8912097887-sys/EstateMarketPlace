@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../redux/store"
 import { signInFail, signInStart, signInSuccess, signUpFail, signUpStart, signUpSuccess } from "../redux/user/userSlice"
 import { Link, useNavigate } from "react-router"
+import OAuthBtn from "./OAuthBtn"
 
 type Props = {
     isLogin: boolean
@@ -58,8 +59,7 @@ const RegisterForm = ({ isLogin }: Props) => {
         if(typeof result === "string") {
            dispatch(signInFail(result));
         } else {
-           dispatch(signInSuccess({ user: result.user,accessToken: result.accessToken }));
-           console.log("success");
+           dispatch(signInSuccess(result));
         }
     }
 
@@ -86,7 +86,7 @@ const RegisterForm = ({ isLogin }: Props) => {
                     data-testid="username-input"
                     placeholder='username'
                     className="p-3 rounded-lg border"
-                    type="username" 
+                    type="text" 
                     id="username"
                     name="username"
                     value={state.username}
@@ -114,6 +114,7 @@ const RegisterForm = ({ isLogin }: Props) => {
                 onChange={(e) => handleChange(e.target.name as InputType,e.target.value)}
             />
             <button className="rounded-lg text-white bg-slate-700 cursor-pointer p-3 uppercase hover:opacity-95 disabled:opacity-80" disabled={loading} type="submit">{loading?"Loading...":isLogin?"Login":"Signup"}</button>
+            <OAuthBtn/>
         </form>
         <div className="flex gap-2 mt-5">
            <p>{isLogin?"Dont have an account?":"Have an account"}</p>

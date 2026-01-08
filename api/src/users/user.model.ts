@@ -49,9 +49,10 @@ const userSchema = new mongoose.Schema({
         trim: true,
         validate: {
             validator: (profile: string) => {
-                // Base url regex
-                const urlRegex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg))($|\?.*)$/i;
-                return urlRegex.test(profile);
+                 // Check if it's come from trusted host(like Google)
+                const isTrustedHost = profile.includes("googleusercontent.com");
+                const hasExtension = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'].some(ext => profile.split("?")[0].toLowerCase().endsWith(`${ext}`));
+                return isTrustedHost || hasExtension;
             },
             message: (prop) => `${prop.value} is not a valid image URL` 
         },
