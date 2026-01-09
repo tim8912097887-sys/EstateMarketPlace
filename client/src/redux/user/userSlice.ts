@@ -68,7 +68,19 @@ export const userSlice = createSlice({
         deleteUserFail: (state,action) => {
             state.loading = false;
             state.errorMsg = action.payload;
-        }
+        },
+        updateUserStart: (state) => {
+            state.loading = true;
+        },
+        updateUserSuccess: (state,action) => {
+            state.loading = false;
+            state.currentUser = action.payload.user;
+            state.errorMsg = "";
+        },
+        updateUserFail: (state,action) => {
+            state.loading = false;
+            state.errorMsg = action.payload;
+        },
     }
 })
 // For dispatch the task
@@ -84,6 +96,9 @@ export const {
     ,signUpSuccess
     ,deleteUserFail
     ,deleteUserStart
-    ,deleteUserSuccess } = userSlice.actions;
+    ,deleteUserSuccess
+    ,updateUserFail
+    ,updateUserStart
+    ,updateUserSuccess } = userSlice.actions;
 // Use in store
 export default userSlice.reducer;

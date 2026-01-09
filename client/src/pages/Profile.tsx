@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../redux/store"
-import { useReducer, useRef, useState } from "react";
+import { useReducer, useState } from "react";
 import { useNavigate } from "react-router";
-import { deleteUser, logoutUser } from "../api/user";
-import { deleteUserFail, deleteUserStart, deleteUserSuccess, signOutFail, signOutStart, signOutSuccess } from "../redux/user/userSlice";
+import { deleteUser, logoutUser, updateUser } from "../api/user";
+import { deleteUserFail, deleteUserStart, deleteUserSuccess, signOutFail, signOutStart, signOutSuccess, updateUserFail, updateUserStart, updateUserSuccess } from "../redux/user/userSlice";
+import type { UpdateUserType } from "../schemas/updateUser";
 
 type State = {
     username: string
@@ -38,17 +39,32 @@ const Profile = () => {
   const { currentUser,loading,errorMsg,accessToken } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigate();
+  const[updateSuccess,setUpdateSuccess] = useState(false);
   const [state,dispatcher] = useReducer(reducer,{ username: "",email: "",password: "" });
-  const [file,setFile] = useState<File | undefined>();
-  const fileRef = useRef<HTMLInputElement>(null);
   const handleChange = (type: InputType,value: string) => {
         dispatcher({ type,payload: value });
   }
+
   // Handle user info update
-  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdate = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      
-  }
+      const updatedData: UpdateUserType = {};
+      // Only include truthy value  
+      if(state.username) updatedData.username = state.username;
+      if(state.email) updatedData.email = state.email;
+      if(state.password) updatedData.password = state.password;
+      dispatch(updateUserStart());
+      const result = await updateUser(accessToken,updatedData);
+      if(typeof result === "string") {
+          dispatch(updateUserFail(result));
+      } else {
+          // Set success message and clear password
+          setUpdateSuccess(true);
+          if(state.password) dispatcher({ type: "password",payload: "" });
+          dispatch(updateUserSuccess(result));
+          
+      }
+   }
 
   const deleteAccount = async() => {
         // Guard Clause: protect delete account in unauth state(like user double click)
@@ -78,20 +94,10 @@ const Profile = () => {
     <div className="mx-auto max-w-lg p-3">
        <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
        <form onSubmit={handleUpdate} className="flex flex-col gap-4">
-            <input 
-                type="file"
-                name="file"
-                id="file"
-                accept="image/*"
-                ref={fileRef}
-                onChange={(e) => setFile(e.target.files?.[0])}
-                hidden
-            />
             <img 
              src={currentUser?.avatar} 
-             className="w-24 h-24 rounded-full object-cover self-center mt-2 cursor-pointer" 
+             className="w-24 h-24 rounded-full object-cover self-center mt-2" 
              alt="profile" 
-             onClick={() => fileRef.current?.click()}
             />
             <input 
                 data-testid="username-input"
@@ -120,6 +126,7 @@ const Profile = () => {
                 type="password" 
                 id="password"
                 name="password"
+                value={state.password}
                 onChange={(e) => handleChange(e.target.name as InputType,e.target.value)}
             />
             <button type="submit" disabled={loading} className="bg-slate-700 text-white cursor-pointer hover:opacity-95 uppercase rounded-lg p-3 disabled:opacity-80">{loading?"Loading...":"Update"}</button>
@@ -129,6 +136,7 @@ const Profile = () => {
          <button disabled={loading} onClick={signout} type="button" className="text-red-700 cursor-pointer hover:text-red-500 disabled:text-red-500" >Sign out</button>
        </div>
        {errorMsg && <p className="text-red-700 text-2xl">{errorMsg}</p>}
+       {updateSuccess && <p className="text-green-500 text-2xl">Update Successfully</p>}
     </div>
   )
 }

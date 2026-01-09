@@ -1,5 +1,6 @@
 import { LoginUserSchema, type LoginUserType } from "../schemas/loginUser"
 import { SignupUserSchema, type SignupUserType } from "../schemas/signupUser";
+import { UpdateUserSchema, type UpdateUserType } from "../schemas/updateUser";
 import { createRequest } from "../utilities/apiHelper"
 import { asyncHandler } from "../utilities/asyncHandler"
 
@@ -63,4 +64,34 @@ export const deleteUser = asyncHandler(async(token: string) => {
     const data = await res.json();
     // Whether fail or success all return string
     return data.message;
+})
+
+export const refreshUser = asyncHandler(async() => {
+     const res = await fetch('/api/users/refresh',createRequest('GET'));
+     const data = await res.json();
+     return data;
+})
+
+export const updateUser = asyncHandler(async(token: string,user: UpdateUserType) => {
+    
+    const validateUser = UpdateUserSchema.safeParse(user);
+    if(!validateUser.success) return validateUser.error.issues[0].message;
+
+    const res = await fetch('/api/users/me',{
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            // Bearer token for authentication
+            "authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(validateUser.data),
+        credentials: "include"
+    });
+ 
+    const data = await res.json();
+    if(data.success) {
+        return data.data;
+    } else {
+        return data.message;
+    }
 })

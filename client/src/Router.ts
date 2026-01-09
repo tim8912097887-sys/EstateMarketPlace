@@ -7,6 +7,7 @@ import App from "./App";
 import React from "react";
 import AuthUser from "./components/AuthUser";
 import Profile from "./pages/Profile";
+import PersistLogin from "./components/PersistLogin";
 // import GuestOnly from "./components/GuestOnly";
 
 const Home = React.lazy(() => import('./pages/Home'));
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
         path: '/',
         Component: App,
         children: [
+          {
+            // Gatekeeper for login state
+            Component: PersistLogin,
+            children: [
            {
              index: true,
              Component: Home
@@ -52,6 +57,8 @@ export const router = createBrowserRouter([
                }
             ]
            }
+        ]
+          }
         ]
     }
 ])

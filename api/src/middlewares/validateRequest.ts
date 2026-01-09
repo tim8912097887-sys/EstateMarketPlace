@@ -7,6 +7,7 @@ type ValidationSchema = z.ZodObject;
 
 // Customize the validation for different schema
 export const validateRequest = (schema: ValidationSchema) => ((req: Request,res: Response,next: NextFunction) => {
+     console.log(req.body)
      const validatedBody = schema.safeParse(req.body);
 
      // Pass App error down if unsuccess 
