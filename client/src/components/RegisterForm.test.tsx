@@ -52,9 +52,14 @@ describe("RegisterForm Unit Tests",() => {
 
         it('should disable the button when loading is true', () => {
             renderWithProvider(<RegisterForm isLogin={true}/>,{ loading: true });
-            const submitButton = screen.getByRole("button",{ name: /loading/i });
-            expect(submitButton).toBeInTheDocument();
-            expect(submitButton).toBeDisabled();
+            const buttons = screen.getAllByRole("button",{ name: /loading/i });
+            // Submit button and google auth button
+            expect(buttons).toHaveLength(2);
+            // Check the correctness of disable state and display text
+            buttons.forEach((button) => {
+                expect(button.textContent).toMatch(/loading.../i);
+                expect(button).toBeDisabled();
+            })
         })
 
         it('should display error message when error present in store', () => {

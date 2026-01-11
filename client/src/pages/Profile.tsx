@@ -68,13 +68,11 @@ const Profile = () => {
 
   const deleteAccount = async() => {
         // Guard Clause: protect delete account in unauth state(like user double click)
-    //   if(!accessToken) return navigation("/signin");
+      if(!accessToken) return navigation("/signin");
       dispatch(deleteUserStart());
       const result = await deleteUser(accessToken);
-      if(result.includes("Successfully")) {
+      if(result.includes("Successful")) {
          dispatch(deleteUserSuccess());
-         // Navigate to signup page when success
-         navigation("/signup");
       } else {
          dispatch(deleteUserFail(result));
       }
@@ -87,7 +85,7 @@ const Profile = () => {
       if(resultString.includes("Success")) {
         return dispatch(signOutSuccess());
       } else {
-        return dispatch(signOutFail(resultString));
+        return dispatch(signOutFail("Signout Fail"));
       }
   }
   return (
@@ -129,14 +127,14 @@ const Profile = () => {
                 value={state.password}
                 onChange={(e) => handleChange(e.target.name as InputType,e.target.value)}
             />
-            <button type="submit" disabled={loading} className="bg-slate-700 text-white cursor-pointer hover:opacity-95 uppercase rounded-lg p-3 disabled:opacity-80">{loading?"Loading...":"Update"}</button>
+            <button data-testid="update-account" type="submit" disabled={loading} className="bg-slate-700 text-white cursor-pointer hover:opacity-95 uppercase rounded-lg p-3 disabled:opacity-80">{loading?"Loading...":"Update"}</button>
        </form>
        <div className="flex justify-between items-center mt-5">
-         <button disabled={loading} onClick={deleteAccount} type="button" className="text-red-700 cursor-pointer hover:text-red-500 disabled:text-red-500" >Delete Account</button>
-         <button disabled={loading} onClick={signout} type="button" className="text-red-700 cursor-pointer hover:text-red-500 disabled:text-red-500" >Sign out</button>
+         <button data-testid="delete-account" disabled={loading} onClick={deleteAccount} type="button" className="text-red-700 cursor-pointer hover:text-red-500 disabled:text-red-500" >Delete Account</button>
+         <button data-testid="logout-account" disabled={loading} onClick={signout} type="button" className="text-red-700 cursor-pointer hover:text-red-500 disabled:text-red-500" >Sign out</button>
        </div>
-       {errorMsg && <p className="text-red-700 text-2xl">{errorMsg}</p>}
-       {updateSuccess && <p className="text-green-500 text-2xl">Update Successfully</p>}
+       {errorMsg && <p data-testid="profile-error" className="text-red-700 text-2xl">{errorMsg}</p>}
+       {updateSuccess && <p data-testid="update-success" className="text-green-500 text-2xl">Update Successfully</p>}
     </div>
   )
 }

@@ -34,7 +34,7 @@ const Header = () => {
 
             {
               currentUser?
-              <Link to="/profile">
+              <Link data-testid="profile-link" to="/profile">
                 <img className="w-7 h-7 rounded-full object-cover" src={currentUser.avatar} alt="profile" />
               </Link>
               :

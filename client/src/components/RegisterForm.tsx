@@ -114,7 +114,7 @@ const RegisterForm = ({ isLogin }: Props) => {
                 onChange={(e) => handleChange(e.target.name as InputType,e.target.value)}
             />
             <button className="rounded-lg text-white bg-slate-700 cursor-pointer p-3 uppercase hover:opacity-95 disabled:opacity-80" disabled={loading} type="submit">{loading?"Loading...":isLogin?"Login":"Signup"}</button>
-            <OAuthBtn/>
+            {isLogin && <OAuthBtn/>}
         </form>
         <div className="flex gap-2 mt-5">
            <p>{isLogin?"Dont have an account?":"Have an account"}</p>

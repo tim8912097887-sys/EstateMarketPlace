@@ -5,7 +5,7 @@ import userReducer from "../redux/user/userSlice"
 import { render } from "@testing-library/react"
 
 // Utility function for render with Provider and router
-export const renderWithProvider = (ui: React.ReactElement,initialState = {}) => {
+export const renderWithProvider = (ui: React.ReactElement,initialState = {},initialRoute = ["/"]) => {
 
     // Configure store according to parameters
     const store = configureStore({
@@ -15,7 +15,7 @@ export const renderWithProvider = (ui: React.ReactElement,initialState = {}) => 
 
     return render(
         <Provider store={store}>
-           <MemoryRouter>
+           <MemoryRouter initialEntries={initialRoute}>
               {ui}
            </MemoryRouter>
         </Provider>
